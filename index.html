@@ -1,0 +1,134 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Проект "Комменты"</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+
+  <body>
+    <div class="container">
+      <ul class="comments">
+        <li class="comment">
+          <div class="comment-header">
+            <div>Глеб Фокин</div>
+            <div>12.02.22 12:18</div>
+          </div>
+          <div class="comment-body">
+            <div class="comment-text">
+              Это будет первый комментарий на этой странице
+            </div>
+          </div>
+          <div class="comment-footer">
+            <div class="likes">
+              <span class="likes-counter">3</span>
+              <button class="like-button"></button>
+            </div>
+          </div>
+        </li>
+        <li class="comment">
+          <div class="comment-header">
+            <div>Варвара Н.</div>
+            <div>13.02.22 19:22</div>
+          </div>
+          <div class="comment-body">
+            <div class="comment-text">
+              Мне нравится как оформлена эта страница! ❤
+            </div>
+          </div>
+          <div class="comment-footer">
+            <div class="likes">
+              <span class="likes-counter">75</span>
+              <button class="like-button -active-like"></button>
+            </div>
+          </div>
+        </li>
+      </ul>
+      <div class="add-form">
+        <input
+          type="text"
+          class="add-form-name"
+          placeholder="Введите ваше имя"
+        />
+        <textarea
+          type="textarea"
+          class="add-form-text"
+          placeholder="Введите ваш коментарий"
+          rows="4"
+        ></textarea>
+        <div class="add-form-row">
+          <button class="add-form-button">Написать</button>
+        </div>
+      </div>
+    </div>
+  </body>
+
+  <script>
+    // 1. Создаем переменные для элементов формы и всего списка комментариев (Шаг 6)
+    const commentsList = document.querySelector(".comments");
+    const nameInput = document.querySelector(".add-form-name");
+    const textInput = document.querySelector(".add-form-text");
+    const addFormButton = document.querySelector(".add-form-button");
+
+    // 2. Обработчик события на нажатие кнопки «Написать» (Шаг 3)
+    addFormButton.addEventListener("click", function () {
+      // Валидация: убираем пробелы и проверяем на пустоту
+      const name = nameInput.value.trim();
+      const text = textInput.value.trim();
+
+      if (name === "" || text === "") {
+        alert(
+          "Нельзя добавить комментарий, не указав своего имени или текста комментария!",
+        );
+        return;
+      }
+
+      // === РАБОТА С ДАТОЙ (Объект Date) ===
+      // Получаем текущую дату и время компьютера
+      const currentDate = new Date();
+
+      // Форматируем день, месяц, год, часы и минуты, чтобы всегда было две цифры (например, "02" вместо "2")
+      const day = String(currentDate.getDate()).padStart(2, "0");
+      const month = String(currentDate.getMonth() + 1).padStart(2, "0"); // Месяцы в JS идут с 0
+      const year = String(currentDate.getFullYear()).slice(-2); // Берем последние 2 цифры года
+      const hours = String(currentDate.getHours()).padStart(2, "0");
+      const minutes = String(currentDate.getMinutes()).padStart(2, "0");
+
+      // Собираем строку даты в нужном формате: "ДД.ММ.ГГ ЧЧ:ММ"
+      const dateString = `${day}.${month}.${year} ${hours}:${minutes}`;
+
+      // === БЕЗОПАСНОСТЬ (Экранирование текста пользователя) ===
+      // Так как задание требует использовать напрямую innerHTML, мы должны вручную
+      // обезвредить текст от XSS-атак, заменив опасные символы < и > на безопасные коды
+      const safeName = name.replaceAll("<", "&lt;").replaceAll(">", "&gt;");
+      const safeText = text.replaceAll("<", "&lt;").replaceAll(">", "&gt;");
+
+      // 3. Создаем шаблонную строку нового комментария (Шаг 4 и 5)
+      // Подставляем в нее безопасное имя, текст, вычисленную дату и 0 лайков
+      const commentHtml = `
+        <li class="comment">
+            <div class="comment-header">
+                <div>${safeName}</div>
+                <div>${dateString}</div>
+            </div>
+            <div class="comment-body">
+                <div class="comment-text">${safeText}</div>
+            </div>
+            <div class="comment-footer">
+                <div class="likes">
+                    <span class="likes-counter">0</span>
+                    <button class="like-button"></button>
+                </div>
+            </div>
+        </li>
+    `;
+
+      // 4. С помощью свойства innerHTML добавляем новый комментарий в конец списка
+      commentsList.innerHTML = commentsList.innerHTML + commentHtml;
+
+      // 5. Очищаем поля ввода
+      nameInput.value = "";
+      textInput.value = "";
+    });
+  </script>
+</html>
