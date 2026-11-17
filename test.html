@@ -1,0 +1,88 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Тренирока рендера"</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+
+  <body>
+    <h1>студенты</h1>
+    <ul id="list">
+      <!--<li><span>Глеб</span><button>удалить</button></li>
+      <li><span>Иван</span><button>удалить</button></li>
+      <li><span>Люси</span><button>удалить</button></li>-->
+    </ul>
+
+    <div>
+      <div id="form-title"></div>
+      Имя:
+      <input type="text" id="field" />
+      <br /><br />
+      <button type="button" id="add">Добавить</button>
+    </div>
+
+    <script>
+      const listElement = document.getElementById("list");
+      const titleContainer = document.getElementById("form-title");
+      const addButton = document.getElementById("add");
+      const nameInput = document.getElementById("field");
+
+      const students = [
+        { name: "Глеб", isMale: true, age: 20 },
+        { name: "Иван", isMale: true, age: 22 },
+        { name: "Люси", isMale: false, age: 19 },
+      ];
+
+      const renderStudents = () => {
+        const studentsHtml = students
+          .map((student) => {
+            return `
+        <li class="student" data-age="${student.age}">
+          ${student.name}, пол: ${student.isMale ? "мужской" : "женский"}, возраст: ${student.age}
+        </li>`;
+          })
+          .join("");
+
+        listElement.innerHTML = studentsHtml;
+
+        // Находим всех отрисованных студентов по классу .student
+        const studentElements = document.querySelectorAll(".student");
+
+        // Вешаем обработчик клика на каждого студента
+        for (const studentElement of studentElements) {
+          studentElement.addEventListener("click", () => {
+            const age = studentElement.dataset.age;
+            console.log(`Возраст: ${age}`);
+          });
+        }
+      };
+
+      const renderFormTitle = () => {
+        titleContainer.innerHTML = `<h3 id="title-heading">Форма добавления</h3>`;
+
+        const titleHeading = document.getElementById("title-heading");
+        titleHeading.addEventListener("click", () => {
+          console.log("клик на заголовок");
+        });
+      };
+
+      addButton.addEventListener("click", () => {
+        if (nameInput.value.trim() === "") {
+          return;
+        }
+
+        students.push({
+          name: nameInput.value,
+          isMale: true,
+          age: 20,
+        });
+
+        nameInput.value = "";
+        renderStudents();
+      });
+
+      renderStudents();
+      renderFormTitle();
+    </script>
+  </body>
+</html>
