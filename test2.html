@@ -1,0 +1,81 @@
+<div class="container">
+  <button class="button1">Button 1</button>
+  <div class="inner-container">
+    <button class="button2">Button 2</button>
+    <button class="button3">Button 3 (двойной клик)</button>
+    <br /><br />
+    <input type="text" class="text-input" placeholder="Введите текст..." />
+    <a href="https://ya.ru" class="my-link">Перейти по ссылке</a>
+  </div>
+</div>
+<script>
+  const button1 = document.querySelector(".button1");
+  const button2 = document.querySelector(".button2");
+  const container = document.querySelector(".container");
+  const innerContainer = document.querySelector(".inner-container");
+  const button3 = document.querySelector(".button3");
+  const textInput = document.querySelector(".text-input");
+  const myLink = document.querySelector(".my-link");
+
+  //   container.addEventListener("click", () => {
+  //     // Теперь этот console.log не будет срабатывать, когда пользователь
+  //     // кликает на Button 1, потому что мы выключили всплытие у события на Button 1
+  //     // но будет срабатывать при клике на Button 2,
+  //     // потому что всплытие у него мы не отключали
+  //     console.log("Container clicked");
+  //   });
+
+  // Обработчик клика на HTML
+  document.documentElement.addEventListener("click", () => {
+    console.log("HTML clicked");
+  });
+  innerContainer.addEventListener("click", (event) => {
+    console.log("innerContainer clicked");
+  });
+
+  // Отключаем всплытие у container
+  container.addEventListener("click", (event) => {
+    event.stopPropagation();
+    console.log("Container clicked");
+  });
+  // 1. Событие двойного клика (dblclick) на Button 3
+  button3.addEventListener("dblclick", (event) => {
+    event.stopPropagation(); // Останавливаем всплытие двойного клика
+    console.log("Button 3: выполнен двойной клик!");
+  });
+
+  // 2. Событие ввода текста (input) в поле
+  textInput.addEventListener("input", (event) => {
+    // event.target.value показывает, что именно сейчас написано в поле
+    console.log("Ввели текст:", event.target.value);
+  });
+
+  // 3. Событие нажатия клавиши (keydown) в поле
+  textInput.addEventListener("keydown", (event) => {
+    console.log("Нажата клавиша:", event.key);
+  });
+
+  // 4. Событие наведения мыши (mouseenter) на innerContainer
+  innerContainer.addEventListener("mouseenter", () => {
+    console.log("Курсор зашёл в синий innerContainer");
+  });
+
+  // 5. Клик по ссылке с отменой перехода (preventDefault) + остановкой всплытия
+  myLink.addEventListener("click", (event) => {
+    event.preventDefault(); // Отменяем переход на другой сайт
+    event.stopPropagation(); // Не пускаем клик дальше в innerContainer и container
+    console.log("Клик по ссылке перехвачен, перехода не будет!");
+  });
+
+  button1.addEventListener("click", (event) => {
+    // stopPropagation() отключает всплытие события вверх по дереву
+    //event.stopPropagation();//
+    console.log("Button 1 clicked");
+  });
+
+  button2.addEventListener("click", (event) => {
+    console.log("Button 2 clicked");
+    // event.stopPropagation();
+    console.log(event); // Выведет объект PointerEvent со всеми свойствами клика
+  });
+</script>
